@@ -1,0 +1,30 @@
+{
+  "name": "tutor-slave",
+  "version": "0.1.0",
+  "description": "A webservice for processing exercises automatically.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Tutor",
+    "Automation",
+    "Sandboxed"
+  ],
+  "contributors": [
+    "Maximilian Klein <dasmaxl@gmail.com> (https://github.com/LittleHelicase)",
+    "Maik Marschner (https://github.com/leMaik)",
+    "Tim Ebbeke (https://github.com/5cript)"
+  ],
+  "author": "Welfenlab",
+  "license": "MIT",
+  "dependencies": {
+    "@tutor/rethinkdb-database": "^0.2.6",
+    "cson": "^3.0.2",
+    "express": "^4.13.3",
+    "node-schedule": "^0.2.9"
+  },
+  "devDependencies": {
+    "@tutor/memory-database": "^0.4.7"
+  }
+}
