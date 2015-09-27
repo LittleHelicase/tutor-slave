@@ -9,14 +9,9 @@ module.exports = function(config){
       db.Manage.lockUnprocessedSolutions().then(function(lock){
 
         if(lock){
-          console.log("lock");
-          pdfexport(fs.readFileSync("./template-instance.html","utf8"), function(converter) {
-            console.log(lock)
+          pdfexport("./template-instance.html", function(converter) {
             var markdown = lock.solution[0];
-            console.log("markdown conversion", markdown);
             converter(markdown, function(err, pdf){
-              console.log("converted");
-              console.log(err);
               var ws = fs.createWriteStream('./example.pdf');
               pdf.stream.pipe(ws);
               setTimeout(Slave.processExercises(),1000);
