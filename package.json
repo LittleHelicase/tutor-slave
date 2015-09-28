@@ -19,12 +19,14 @@
   "author": "Welfenlab",
   "license": "MIT",
   "dependencies": {
+    "@tutor/pdfexport": "^0.1.1",
     "@tutor/rethinkdb-database": "^0.2.6",
     "cson": "^3.0.2",
     "express": "^4.13.3",
     "node-schedule": "^0.2.9"
   },
+  "repository": "gitlab:Welfenlab/tutor-slave.git",
   "devDependencies": {
-    "@tutor/memory-database": "^0.4.7"
+    "@tutor/memory-database": "^0.4.8"
   }
 }
