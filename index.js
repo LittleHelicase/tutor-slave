@@ -1,5 +1,10 @@
 
-var config = require("cson").load("config.cson");
+var config;
+if(process.argv.length == 2){
+  config = require("cson").load("config.cson");
+} else {
+  config = require("cson").load(process.argv[2]);
+}
 var express = require('express');
 var schedule = require('node-schedule');
 var slave = require("./src/slave")(config);
