@@ -3,11 +3,10 @@ var pdfexport = require('@tutor/pdfexport');
 var fs = require('fs');
 
 var cnt = 0;
-module.exports = function(config){
-  var db = require("./db")(config);
+module.exports = function(db, config){
   Slave = {
-    storeSolutions: function(){
-      
+    storeSolution: function(){
+      db.Manage.updateOldestSolution();
     },
     processExercises: function(){
       var inLock = false;
