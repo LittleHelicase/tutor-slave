@@ -16,8 +16,14 @@ app.get("/status", function(req, res){
 });
 
 app.get("/process", function(req, res){
+  debugger;
   var processing = slave.processExercises();
   res.json({processing: processing});
+});
+
+app.get("/storeSolutions", function(req, res){
+  slave.storeSolutions();
+  res.end("starting sharejs store operation");
 });
 
 //schedule.scheduleJob(config.cron, function(){

@@ -2,9 +2,13 @@
 var pdfexport = require('@tutor/pdfexport');
 var fs = require('fs');
 
+var cnt = 0;
 module.exports = function(config){
   var db = require("./db")(config);
   Slave = {
+    storeSolutions: function(){
+      
+    },
     processExercises: function(){
       var inLock = false;
       pdfexport("./template/template.html", function(converter) {
@@ -12,20 +16,18 @@ module.exports = function(config){
           if(inLock) return;
           db.Manage.lockUnprocessedSolutions().then(function(lock){
             inLock = true;
-            var markdown = lock.solution[0];
+            var markdown = lock.tasks.reduce(function(acc, t){ return acc + "\n" + t.solution},"");
             converter(markdown, function(err, pdf){
-              
-              var ws = fs.createWriteStream('./example.pdf');
+              cnt++;
+              var ws = fs.createWriteStream('./pdfs/example'+cnt+'.pdf');
               pdf.stream.pipe(ws);
-              ws.close();
-              
               
               // allow further processing. NO recursion here and no
               // setTimeout here to avoid huge stacks!
               inLock = false;
             });
-          }).catch(function(){
-            console.log("finished!");
+          }).catch(function(err){
+            console.log("finished!", err);
             clearInterval(interval);
             inLock = false;
           });

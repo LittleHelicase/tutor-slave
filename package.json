@@ -23,10 +23,11 @@
     "@tutor/rethinkdb-database": "^0.2.6",
     "cson": "^3.0.2",
     "express": "^4.13.3",
+    "moment": "^2.10.6",
     "node-schedule": "^0.2.9"
   },
   "repository": "gitlab:Welfenlab/tutor-slave.git",
   "devDependencies": {
-    "@tutor/memory-database": "^0.4.8"
+    "@tutor/memory-database": "^0.6.9"
   }
 }
