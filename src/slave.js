@@ -4,26 +4,38 @@ var fs = require('fs');
 
 var cnt = 0;
 module.exports = function(db, config){
+  var inStoreLock = false;
+  var inProcessingLock = false;
+
   Slave = {
     storeSolution: function(){
-      db.Manage.updateOldestSolution();
+      if(inStoreLock) return false;
+      var interval = setInterval(function(){
+        inStoreLock = true;
+        db.Manage.updateOldestSolution().catch(function(err){
+          console.log("updated all solutions!", err);
+          clearInterval(interval);
+          inStoreLock = false;
+        });
+      }, 1000);
+      return true;
     },
     processExercises: function(){
-      var inLock = false;
+      if(inProcessingLock) return false;
       pdfexport("./template/template.html", function(converter) {
         var interval = setInterval(function(){
-          if(inLock) return;
+          if(inProcessingLock) return;
           db.Manage.lockUnprocessedSolutions().then(function(lock){
-            inLock = true;
+            inProcessingLock = true;
             var markdown = lock.tasks.reduce(function(acc, t){ return acc + "\n" + t.solution},"");
             converter(markdown, function(err, pdf){
               cnt++;
               var ws = fs.createWriteStream('./pdfs/example'+cnt+'.pdf');
               pdf.stream.pipe(ws);
-              
+
               // allow further processing. NO recursion here and no
               // setTimeout here to avoid huge stacks!
-              inLock = false;
+              inProcessingLock = false;
             });
           }).catch(function(err){
             console.log("finished!", err);
@@ -32,7 +44,7 @@ module.exports = function(db, config){
           });
         }, 1000);
       });
-      return true; 
+      return true;
     }
   };
 

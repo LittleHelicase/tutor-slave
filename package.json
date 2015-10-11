@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@tutor/pdfexport": "^0.1.1",
-    "@tutor/rethinkdb-database": "^0.2.6",
+    "@tutor/rethinkdb-database": "^0.5.7",
     "cson": "^3.0.2",
     "express": "^4.13.3",
     "moment": "^2.10.6",

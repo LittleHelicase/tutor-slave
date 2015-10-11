@@ -23,8 +23,12 @@ if(process.argv.length == 2){
   });
 
   app.get("/storeSolutions", function(req, res){
-    slave.storeSolution();
-    res.end("starting sharejs store operation");
+    var started = slave.storeSolution();
+    if(started){
+      res.end("starting sharejs store operation");
+    } else {
+      res.end("sharejs store operation still in progress");
+    }
   });
 
   //schedule.scheduleJob(config.cron, function(){
