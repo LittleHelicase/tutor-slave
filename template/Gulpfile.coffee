@@ -14,7 +14,7 @@ gulp.task 'bundle', ->
     bundler = browserify './scripts/template.coffee',
         transform: ['coffeeify']
         extensions: ['.coffee']
-        debug: no
+        debug: yes
         standalone: 'template'
     bundler.bundle()
     .pipe source 'template.bundle.js'
