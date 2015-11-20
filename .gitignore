@@ -3,3 +3,4 @@ dist/*
 lib/*
 template/node_modules
 template/scripts/template.bundle.js
+template-instance.html
