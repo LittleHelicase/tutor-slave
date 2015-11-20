@@ -1,4 +1,9 @@
 development: true
+developmentPort: 10101
 cron:
   hour: 14
   minute: 33
+database:
+  host: "srv2"
+  port: 28015
+  name: "TutorDB"
