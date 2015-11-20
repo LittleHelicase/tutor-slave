@@ -17,9 +17,21 @@ if(process.argv.length == 2){
     res.json({status: "up"});
   });
 
-  app.get("/process", function(req, res){
+  app.get("/process/all", function(req, res){
     var processing = slave.processExercises();
     res.json({processing: processing});
+  });
+
+  app.get("/process/:id", function(req, res){
+    slave.processSpecificExercise(req.params.id, function(result, err) {
+      res.json({result: result, error: err});
+    });
+  });
+
+  app.get("/reset/:id", function(req, res) {
+    slave.resetPdf(req.params.id, function(error) {
+      res.json({reset: error === undefined, error: error});
+    });
   });
 
   app.get("/storeSolutions", function(req, res){
