@@ -20,30 +20,49 @@ module.exports = function(db, config){
       }, 1000);
       return true;
     },
-    processExercises: function(){
-      if(inProcessingLock) return false;
-      pdfexport("./template/template.html", function(converter) {
-        var interval = setInterval(function(){
-          if(inProcessingLock) return;
-          db.Manage.lockUnprocessedSolutions().then(function(lock){
-            inProcessingLock = true;
-            var markdown = lock.tasks.reduce(function(acc, t){ return acc + "\n" + t.solution},"");
-            converter(markdown, function(err, pdf){
-              cnt++;
-              var ws = fs.createWriteStream('./pdfs/example'+cnt+'.pdf');
-              pdf.stream.pipe(ws);
-
-              // allow further processing. NO recursion here and no
-              // setTimeout here to avoid huge stacks!
-              inProcessingLock = false;
+    processExercise: function(onFinish) {
+      db.Manage.lockSolutionForPdfProcessor().then(function(solution) {
+        pdfexport("./template/template.html", function(converter) {
+          var markdown = solution.tasks.reduce(function(acc, current){ return acc + "\n" + current},"");
+          converter(markdown, function(err, pdf){
+            cnt++;
+            require('stream-to-array')(pdf.stream).then(function (parts) {
+              var buffers = [];
+              for (var i = 0, l = parts.length; i < l ; ++i) {
+                var part = parts[i]
+                buffers.push((part instanceof Buffer) ? part : new Buffer(part))
+              }
+              db.Manage.insertFinishedPdf(solution.id, Buffer.concat(buffers));
             });
-          }).catch(function(err){
-            console.log("finished!", err);
-            clearInterval(interval);
-            inLock = false;
+
+            // for testing purpose only for now
+            var ws = fs.createWriteStream('./pdfs/example'+cnt+'.pdf');
+            pdf.stream.pipe(ws);
+
+            onFinish(true);
           });
-        }, 1000);
+        });
+      }).catch(function(err) {
+        onFinish(false, err);
       });
+    },
+    processExercises: function() {
+      if(inProcessingLock) return false;
+
+      var interval = setInterval(function(){
+        if(inProcessingLock) return;
+        inProcessingLock = true;
+        Slave.processExercise(function(moreData, err) {
+          // allow further processing. NO recursion here and no
+          // setTimeout here to avoid huge stacks!
+          if (!moreData)
+          {
+            clearInterval(interval);
+            console.log("finished!", err);
+          }
+          inProcessingLock = false;
+        });
+      }, 1000);
       return true;
     }
   };
