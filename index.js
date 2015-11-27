@@ -18,12 +18,12 @@ if(process.argv.length == 2){
   });
 
   app.get("/process/all", function(req, res){
-    var processing = slave.processExercises();
+    var processing = slave.processSolutions();
     res.json({processing: processing});
   });
 
   app.get("/process/:id", function(req, res){
-    slave.processSpecificExercise(req.params.id, function(result, err) {
+    slave.processSpecificSolution(req.params.id, function(result, err) {
       res.json({result: result, error: err});
     });
   });
@@ -31,6 +31,16 @@ if(process.argv.length == 2){
   app.get("/reset/:id", function(req, res) {
     slave.resetPdf(req.params.id, function(error) {
       res.json({reset: error === undefined, error: error});
+    });
+  });
+
+  app.get("/test/:id", function (req, res) {
+    slave.runTest(req.params.id, function(err, testResults) {
+      var o = {testResults: testResults};
+      if (err) {
+        o.error = err;
+      }
+      res.json(o);
     });
   });
 

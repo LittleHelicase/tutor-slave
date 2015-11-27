@@ -1,13 +1,68 @@
 
 var pdfexport = require('@tutor/pdfexport');
 var fs = require('fs');
+var _ = require('lodash');
+var moreMarkdown = require('more-markdown');
 
 var cnt = 0;
 module.exports = function(db, config){
   var inStoreLock = false;
   var inProcessingLock = false;
 
-  processSpecificExerciseImpl = function (solution, onFinish) {
+  // merges markdown for a task
+  mergeMarkdown = function(tests, solutionTests, userCode) {
+    var merged = (tests || "") + "\n\n";
+    merged += (solutionTests || "") + "\n\n";
+    merged += (userCode || "");
+    return merged
+  }
+
+  processMd = function(md) {
+    processors = [];
+
+    var testProcessor  = require('more-markdown/test-processor');
+    var graphTestSuite = require('@tutor/graph-test-suite');
+    var testSuite      = require('@tutor/test-suite');
+
+    processors.push(testProcessor(["test", "tests"], {
+      tests: [
+        testSuite.itTests({
+          registerTest: config.testProcessor.register,
+          testResult: config.testProcessor.testResult,
+          allResults: config.testProcessor.testsFinished
+        }), testSuite.jsTests, graphTestSuite.collectGraphs, graphTestSuite.graphApi, testSuite.debugLog
+      ],
+      runner: {
+        run: function() {
+          var jailedSandbox  = require('@tutor/jailed-sandbox');
+          return _.partial(jailedSandbox.run, _, _, {
+            timeout: config.runTimeout
+          }).apply(undefined, arguments)
+        },
+        debug: function() {
+          var jailedSandbox  = require('@tutor/jailed-sandbox');
+          return _.partial(jailedSandbox.debug, _, _, {
+            timeout: config.debugTimeout
+          }).apply(undefined, arguments);
+        }
+      },
+      templates: {
+        tests: config.testProcessor.template
+      }
+    }));
+
+    moreMarkdown.process(md, {
+      processors: processors,
+      html: false,
+
+    })
+  }
+
+  runTaskTest = function(processedMd) {
+
+  };
+
+  processSpecificSolutionImpl = function(solution, onFinish) {
     pdfexport("./template/template.html", function(converter) {
       var markdown = solution.tasks.reduce(function(acc, current){ return acc + "\n" + current},"");
       converter(markdown, function(err, pdf){
@@ -46,32 +101,45 @@ module.exports = function(db, config){
       }, 1000);
       return true;
     },
-    processSpecificExercise: function(solutionId, onFinish) {
+    processSpecificSolution: function(solutionId, onFinish) {
       db.Manage.lockSpecificSolutionForPdfProcessor(solutionId).then(function(rdbChange) {
         if (rdbChange.replaced === 1) {
-          return processSpecificExerciseImpl(rdbChange.changes[0].new_val, onFinish);
+          return processSpecificSolutionImpl(rdbChange.changes[0].new_val, onFinish);
         }
         else {
-          return Promise.reject()
+          Slave.resetPdf(solutionId, function(err) {
+            if (err) {
+              onFinish(false, err);
+            } else {
+              db.Manage.lockSpecificSolutionForPdfProcessor(solutionId).then(function(rdbChange) {
+                if (rdbChange.replaced !== 1)
+                  onFinish(false, "could not update already processed solution after reset.");
+                else
+                  return processSpecificSolutionImpl(rdbChange.changes[0].new_val, onFinish);
+              }).catch(function(err) {
+                onFinish(false, "could not reset and update already processed solution.");
+              })
+            }
+          })
         }
-      }).catch(function(err) {
-        onFinish(false, "id does not exist, or nothing was updated")
-      });
-    },
-    processExercise: function(onFinish) {
-      db.Manage.lockSolutionForPdfProcessor().then(function(solution) {
-        processSpecificExerciseImpl(solution, onFinish);
       }).catch(function(err) {
         onFinish(false, err);
       });
     },
-    processExercises: function() {
+    processSolution: function(onFinish) {
+      db.Manage.lockSolutionForPdfProcessor().then(function(solution) {
+        processSpecificSolutionImpl(solution, onFinish);
+      }).catch(function(err) {
+        onFinish(false, err);
+      });
+    },
+    processSolutions: function() {
       if(inProcessingLock) return false;
 
       var interval = setInterval(function(){
         if(inProcessingLock) return;
         inProcessingLock = true;
-        Slave.processExercise(function(moreData, err) {
+        Slave.processSolution(function(moreData, err) {
           // allow further processing. NO recursion here and no
           // setTimeout here to avoid huge stacks!
           if (!moreData)
@@ -83,6 +151,24 @@ module.exports = function(db, config){
         });
       }, 1000);
       return true;
+    },
+    // runs test of exercise
+    runTest: function(solutionId, callback) {
+      db.Manage.pluckSolution(solutionId, ["exercise", "tasks"]).then(function (solution) {
+        db.Manage.getTestsFromExercise(solution.exercise).then(function (exerciseTasks) {
+
+          for (var i = 0; i != exerciseTasks.length; ++i) {
+            var merged = mergeMarkdown(exerciseTasks[i].tests, exerciseTasks[i].solutionTests, solution.tasks[i]);
+            processMd(merged);
+          }
+
+          callback(null, exerciseTasks);
+        }).catch(function(err) {
+          callback(err);
+        });
+      }).catch(function(err) {
+        callback("No such solution");
+      });
     }
   };
 
