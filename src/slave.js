@@ -3,6 +3,8 @@ var pdfexport = require('@tutor/pdfexport');
 var fs = require('fs');
 var _ = require('lodash');
 var moreMarkdown = require('more-markdown');
+var async = require('async');
+jailed = require('jailed');
 
 var cnt = 0;
 module.exports = function(db, config){
@@ -17,50 +19,56 @@ module.exports = function(db, config){
     return merged
   }
 
-  processMd = function(md) {
+  processMd = function(taskIdx, md, result, cb) {
     processors = [];
 
-    var testProcessor  = require('more-markdown/test-processor');
+    var testProcessor  = require('@more-markdown/test-processor');
     var graphTestSuite = require('@tutor/graph-test-suite');
     var testSuite      = require('@tutor/test-suite');
+    var testConfig     = require('./test_config.js');
 
     processors.push(testProcessor(["test", "tests"], {
       tests: [
         testSuite.itTests({
-          registerTest: config.testProcessor.register,
-          testResult: config.testProcessor.testResult,
-          allResults: config.testProcessor.testsFinished
-        }), testSuite.jsTests, graphTestSuite.collectGraphs, graphTestSuite.graphApi, testSuite.debugLog
+          registerTest: function(name) {
+            result[taskIdx].push({name: name, passes: false});
+          },
+          testResult: function(err, idx) {
+            result[taskIdx] = {};
+            result[taskIdx][idx].passes = (err == null);
+          },
+          allResults: function(results) {
+            if (result[taskIdx] == undefined)
+              result[taskIdx] = {};
+            result[taskIdx].results = results;
+          }
+        }), testSuite.jsTests, graphTestSuite.collectGraphs, graphTestSuite.graphApi
       ],
       runner: {
         run: function() {
           var jailedSandbox  = require('@tutor/jailed-sandbox');
           return _.partial(jailedSandbox.run, _, _, {
-            timeout: config.runTimeout
-          }).apply(undefined, arguments)
+            timeout: testConfig.runTimeout
+          }).apply(undefined, arguments);
         },
         debug: function() {
           var jailedSandbox  = require('@tutor/jailed-sandbox');
           return _.partial(jailedSandbox.debug, _, _, {
-            timeout: config.debugTimeout
+            timeout: testConfig.debugTimeout
           }).apply(undefined, arguments);
         }
       },
       templates: {
-        tests: config.testProcessor.template
+        tests: testConfig.testProcessor.template
       }
     }));
 
     moreMarkdown.process(md, {
       processors: processors,
       html: false,
+    }, function(err) {cb()});
 
-    })
   }
-
-  runTaskTest = function(processedMd) {
-
-  };
 
   processSpecificSolutionImpl = function(solution, onFinish) {
     pdfexport("./template/template.html", function(converter) {
@@ -90,7 +98,7 @@ module.exports = function(db, config){
         callback(err);
       });
     },
-    storeSolution: function(){
+    storeSolutions: function() {
       if(inStoreLock) return false;
       var interval = setInterval(function(){
         inStoreLock = true;
@@ -99,6 +107,13 @@ module.exports = function(db, config){
           inStoreLock = false;
         });
       }, 1000);
+      return true;
+    },
+    storeSolution: function(sid, cb) {
+      if(inStoreLock) return false;
+      db.Manage.storeSolution(sid).then(function(res) {
+        cb(null, res);
+      });
       return true;
     },
     processSpecificSolution: function(solutionId, onFinish) {
@@ -157,18 +172,28 @@ module.exports = function(db, config){
       db.Manage.pluckSolution(solutionId, ["exercise", "tasks"]).then(function (solution) {
         db.Manage.getTestsFromExercise(solution.exercise).then(function (exerciseTasks) {
 
-          for (var i = 0; i != exerciseTasks.length; ++i) {
-            var merged = mergeMarkdown(exerciseTasks[i].tests, exerciseTasks[i].solutionTests, solution.tasks[i]);
-            processMd(merged);
-          }
+          var result = [];
 
-          callback(null, exerciseTasks);
-        }).catch(function(err) {
+          async.forEachOf(
+            exerciseTasks,
+            function(value, key, cb) {
+              var merged = mergeMarkdown(exerciseTasks.tests, value.solutionTests, solution.tasks[key]);
+              processMd(key, merged, result, cb);
+            },
+            function(err) {
+              if (err)
+                callback(err, result);
+              else
+                callback(null, result);
+            }
+          )
+        })});/*).catch(function(err) {
           callback(err);
         });
       }).catch(function(err) {
         callback("No such solution");
       });
+      */
     }
   };
 
