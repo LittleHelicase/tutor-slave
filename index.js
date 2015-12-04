@@ -45,12 +45,23 @@ if(process.argv.length == 2){
   });
 
   app.get("/storeSolutions", function(req, res){
-    var started = slave.storeSolution();
+    var started = slave.storeSolutions();
     if(started){
-      res.end("starting sharejs store operation");
+      res.send("starting sharejs store operation").end();
     } else {
-      res.end("sharejs store operation still in progress");
+      res.send("sharejs store operation still in progress").end();
     }
+  });
+
+  app.get("/storeSolution/:id", function(req, res) {
+    var cb = function(err, result) {
+      if (err)
+        res.json({error: err});
+      else
+        res.json({result: result});
+    };
+    if (!slave.storeSolution(req.params.id, cb))
+      res.send("cannot store solution while a bulk store operation is in progress");
   });
 
   //schedule.scheduleJob(config.cron, function(){
