@@ -26,6 +26,7 @@
     "@tutor/test-suite": "^0.2.2",
     "cson": "^3.0.2",
     "express": "^4.13.3",
+    "jailed": "^0.2.0",
     "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "more-markdown": "^0.2.1",
