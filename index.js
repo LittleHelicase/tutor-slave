@@ -1,3 +1,4 @@
+var bodyParser = require('body-parser');
 
 var config;
 if(process.argv.length == 2){
@@ -8,10 +9,12 @@ if(process.argv.length == 2){
 
 (require("./src/db")(config)).then(function(db){
   var express = require('express');
-  var schedule = require('node-schedule');
   var slave = require("./src/slave")(db,config);
+  var scheduler = require('./src/scheduler')(slave, db, config);
 
   var app = express();
+
+  app.use(bodyParser.json());
 
   app.get("/status", function(req, res){
     res.json({status: "up"});
@@ -47,9 +50,9 @@ if(process.argv.length == 2){
   app.get("/storeSolutions", function(req, res){
     var started = slave.storeSolutions();
     if(started){
-      res.send("starting sharejs store operation").end();
+      res.status(400).send("starting sharejs store operation").end();
     } else {
-      res.send("sharejs store operation still in progress").end();
+      res.status(400).send("sharejs store operation still in progress").end();
     }
   });
 
@@ -61,7 +64,43 @@ if(process.argv.length == 2){
         res.json({result: result});
     };
     if (!slave.storeSolution(req.params.id, cb))
-      res.send("cannot store solution while a bulk store operation is in progress");
+      res.status(400).send("cannot store solution while a bulk store operation is in progress");
+  });
+
+  app.post("/job/add", function(req, res) {
+      info = req.body;
+
+      if (info.name === undefined || info.data === undefined) {
+        res.status(400).send("you must specify name and data for the job").end();
+        return;
+      }
+
+      if (info.type !== undefined && type != "recurring" && type != "cron" && type != "date") {
+        res.status(400).send("the specified type is unknown / not valid").end();
+        return;
+      }
+
+      if (!scheduler.isValidJob(info.name, info.data)) {
+        res.status(400).send("job is not known, or data is not a valid cron string or was not accepted by node-schedule").end();
+        return;
+      }
+
+      // ok everything good now!
+      scheduler.addJob(info.name, info.type, info.data, function(changes){
+        res.json({id: changes.generated_keys[0]});
+      });
+  });
+
+  app.get("/job/run/:id", function(req, res) {
+    info = req.body;
+
+    // FIXME
+    scheduler.runJob(req.params.id, function(err, job) {
+      if (err !== null && err !== undefined)
+        res.json(job);
+      else
+        res.status(400).send("could not start a job with id: " + req.params.id + "<br>is the id valid?");
+    });
   });
 
   //schedule.scheduleJob(config.cron, function(){
