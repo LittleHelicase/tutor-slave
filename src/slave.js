@@ -181,19 +181,21 @@ module.exports = function(db, config){
               processMd(key, merged, result, cb);
             },
             function(err) {
+
+              // FIXME: Do something useful!
+
               if (err)
                 callback(err, result);
               else
                 callback(null, result);
             }
           )
-        })});/*).catch(function(err) {
+        }).catch(function(err) {
           callback(err);
         });
       }).catch(function(err) {
         callback("No such solution");
       });
-      */
     }
   };
 
