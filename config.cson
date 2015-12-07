@@ -1,8 +1,5 @@
 development: true
 developmentPort: 10101
-cron:
-  hour: 14
-  minute: 33
 database:
   host: "srv2"
   port: 28015
@@ -11,3 +8,5 @@ sharejs:
   tableName: "DummyUebung201516"
   rethinkdb:
     db: "test"
+jobs:
+  startAll: true
