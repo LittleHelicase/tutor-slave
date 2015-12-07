@@ -2,17 +2,19 @@ jobControl = require('./job_control');
 _ = require('lodash');
 
 var startJob = function(job) {
-  control.scheduleJob(job.name, job.data, jobs[job.name]);
+  jobControl.scheduleJob(job.id, job.data, jobs[job.name]);
 }
 
 module.exports = function(slave, db, config) {
+  // all known job functions
   jobs = require('./jobs')(slave, db, config);
 
   return {
     startAll: function() {
-      var dbJobs = db.Jobs.getAllJobs();
-      _.forEach(dbJobs, function(job) {
-        startJob(job);
+      var dbJobs = db.Jobs.getAllJobs().then(function(dbJobs) {
+        _.forEach(dbJobs, function(job) {
+          startJob(job);
+        });
       });
     },
     isValidJob: function(name, data) {
@@ -27,11 +29,14 @@ module.exports = function(slave, db, config) {
     },
     runJob: function(id, cb) {
       db.Jobs.getJob(id).then(function(job) {
-        jobControl.scheduleJob(id, job.name, job.data, jobs[job.name]);
+        startJob(job);
         cb(null, job);
       }).catch(function(err) {
-        cb(err);
+        cb(err, null);
       });
+    },
+    cancelJob: function(id) {
+      jobControl.cancelJob(id);
     }
   }
 }

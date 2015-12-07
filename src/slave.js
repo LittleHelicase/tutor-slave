@@ -72,7 +72,7 @@ module.exports = function(db, config){
 
   processSpecificSolutionImpl = function(solution, onFinish) {
     pdfexport("./template/template.html", function(converter) {
-      var markdown = solution.tasks.reduce(function(acc, current){ return acc + "\n" + current},"");
+      var markdown = solution.tasks.solution.reduce(function(acc, current){ return acc + "\n" + current},"");
       converter(markdown, function(err, pdf){
         cnt++;
         require('stream-to-array')(pdf.stream).then(function (parts) {
@@ -92,6 +92,14 @@ module.exports = function(db, config){
   Slave = {
     resetPdf: function(solutionId, callback) {
       db.Manage.resetPdfForSolution(solutionId).then(function() {
+        callback();
+      })
+      .catch(function(err) {
+        callback(err);
+      });
+    },
+    resetAllPdf: function(callback) {
+      db.Manage.resetPdfForAllSolutions().then(function() {
         callback();
       })
       .catch(function(err) {
@@ -143,7 +151,10 @@ module.exports = function(db, config){
     },
     processSolution: function(onFinish) {
       db.Manage.lockSolutionForPdfProcessor().then(function(solution) {
-        processSpecificSolutionImpl(solution, onFinish);
+        if (solution === null)
+          onFinish(false, null)
+        else
+          processSpecificSolutionImpl(solution, onFinish);
       }).catch(function(err) {
         onFinish(false, err);
       });
@@ -160,7 +171,9 @@ module.exports = function(db, config){
           if (!moreData)
           {
             clearInterval(interval);
-            console.log("finished!", err);
+            console.log("pdf processor finished");
+            if (err)
+              console.log("But an error occured :( ", err);
           }
           inProcessingLock = false;
         });
@@ -177,13 +190,12 @@ module.exports = function(db, config){
           async.forEachOf(
             exerciseTasks,
             function(value, key, cb) {
-              var merged = mergeMarkdown(exerciseTasks.tests, value.solutionTests, solution.tasks[key]);
+              var merged = mergeMarkdown(exerciseTasks.tests, value.solutionTests, solution.tasks[key].solution);
               processMd(key, merged, result, cb);
             },
             function(err) {
 
               // FIXME: Do something useful!
-
               if (err)
                 callback(err, result);
               else
