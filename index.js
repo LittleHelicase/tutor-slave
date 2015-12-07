@@ -20,22 +20,28 @@ if(process.argv.length == 2){
     res.json({status: "up"});
   });
 
-  app.get("/process/all", function(req, res){
+  app.get("/pdf/processAll", function(req, res){
     var processing = slave.processSolutions();
     res.json({processing: processing});
   });
 
-  app.get("/process/:id", function(req, res){
+  app.get("/pdf/process/:id", function(req, res) {
     slave.processSpecificSolution(req.params.id, function(result, err) {
       res.json({result: result, error: err});
     });
   });
 
-  app.get("/reset/:id", function(req, res) {
+  app.get("/pdf/reset/:id", function(req, res) {
     slave.resetPdf(req.params.id, function(error) {
       res.json({reset: error === undefined, error: error});
     });
   });
+
+  app.get("/pdf/resetAll", function(req, res) {
+    slave.resetAllPdf(function(error) {
+      res.json({reset: error === undefined, error: error});
+    })
+  })
 
   app.get("/test/:id", function (req, res) {
     slave.runTest(req.params.id, function(err, testResults) {
@@ -47,7 +53,7 @@ if(process.argv.length == 2){
     });
   });
 
-  app.get("/storeSolutions", function(req, res){
+  app.get("/solutions/store", function(req, res){
     var started = slave.storeSolutions();
     if(started){
       res.status(400).send("starting sharejs store operation").end();
@@ -56,7 +62,13 @@ if(process.argv.length == 2){
     }
   });
 
-  app.get("/storeSolution/:id", function(req, res) {
+  // Warning: Could cause heavy load.
+  app.get("/solutions/storeFinal", function(req, res) {
+    slave.storeAllFinalSolutions();
+    res.sendStatus(204);
+  });
+
+  app.get("/solution/store/:id", function(req, res) {
     var cb = function(err, result) {
       if (err)
         res.json({error: err});
@@ -67,6 +79,14 @@ if(process.argv.length == 2){
       res.status(400).send("cannot store solution while a bulk store operation is in progress");
   });
 
+  /**
+   *  A job consists of a function name (see jobs.js) which is to be executed
+   *  and a job specification (called data) which specifies when to execute the job.
+   *  Data accepts all formats that node-schedule accepts.
+   *
+   *  A job (identified by database id) can only run once per slave.
+   *  But a slave can run multiple jobs of different id.
+   */
   app.post("/job/add", function(req, res) {
       info = req.body;
 
@@ -94,19 +114,24 @@ if(process.argv.length == 2){
   app.get("/job/run/:id", function(req, res) {
     info = req.body;
 
-    // FIXME
     scheduler.runJob(req.params.id, function(err, job) {
-      if (err !== null && err !== undefined)
-        res.json(job);
+      if (err === null || err === undefined)
+        res.json({job: job});
       else
-        res.status(400).send("could not start a job with id: " + req.params.id + "<br>is the id valid?");
+        res.status(400).json({error: undefined});
     });
   });
 
-  //schedule.scheduleJob(config.cron, function(){
-  //  console.log("cron at ", config.cron);
-  //});
+  app.get("/job/cancel/:id", function(req, res) {
+    // cancel a job only if its running
+    scheduler.cancelJob(req.params.id);
+  });
 
   console.log("starting slave server on " + config.developmentPort);
   app.listen(config.developmentPort);
+
+  if (config.jobs.startAll === true) {
+    console.log("starting all jobs");
+    scheduler.startAll();
+  }
 });
