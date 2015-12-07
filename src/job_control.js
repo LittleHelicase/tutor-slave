@@ -16,8 +16,9 @@ var cancelJobImpl = function(id) {
 
 module.exports = {
   scheduleJob: function(id, spec, fn) {
-    cancelJob(id);
-    return jobs[id] = schedule.scheduleJob(spec, fn);
+    cancelJobImpl(id);
+    jobs[id] =  schedule.scheduleJob(spec, fn);
+    return jobs[id];
   },
   createRecurring: function() {
     return new schedule.RecurrenceRule();
