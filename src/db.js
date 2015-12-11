@@ -11,6 +11,12 @@ module.exports = function(config) {
     return (require("@tutor/rethinkdb-database"))(config);
   }
   */
+  if(process.env.RETHINKDB_PORT_28015_TCP_ADDR) {
+    config.database.host = process.env.RETHINKDB_PORT_28015_TCP_ADDR;
+  }
+  if(process.env.RETHINKDB_PORT_28015_TCP_PORT) {
+    config.database.port = parseInt(process.env.RETHINKDB_PORT_28015_TCP_PORT);
+  }
   console.log("### development environment with RethinkDB @" +
     config.database.host + ":" + config.database.port + "/" + config.database.name + " ###")
   return (require("@tutor/rethinkdb-database"))(config);
