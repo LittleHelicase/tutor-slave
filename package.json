@@ -24,6 +24,7 @@
     "@tutor/pdfexport": "^0.1.3",
     "@tutor/rethinkdb-database": "^0.5.18",
     "@tutor/test-suite": "^0.2.2",
+    "async": "^1.5.0",
     "body-parser": "^1.14.1",
     "cron-parser": "^1.0.2",
     "cson": "^3.0.2",
