@@ -5,11 +5,14 @@ module.exports = function(slave, db, config) {
     printJob: function() {
       console.log("This is a test job");
     },
-    storeSolutions: function() {
-      slave.storeSolutions();
+    storeAllSolutions: function() {
+      slave.storeAllSolutions();
     },
     processSolutions: function() {
       slave.processSolutions();
+    },
+    storeSolutionsForever: function() {
+      slave.storeSolutionsForever();
     }
   }
 }

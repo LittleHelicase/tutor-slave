@@ -9,4 +9,4 @@ sharejs:
   rethinkdb:
     db: "test"
 jobs:
-  startAll: true
+  startAll: false

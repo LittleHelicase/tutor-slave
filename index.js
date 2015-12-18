@@ -20,30 +20,33 @@ if(process.argv.length == 2){
     res.json({status: "up"});
   });
 
-  app.get("/pdf/processAll", function(req, res){
+  app.get("/pdfs/processAll", function(req, res){
     var processing = slave.processSolutions();
     res.json({processing: processing});
   });
 
-  app.get("/pdf/process/:id", function(req, res) {
+  // id = solutionId
+  app.get("/pdfs/process/:id", function(req, res) {
     slave.processSpecificSolution(req.params.id, function(result, err) {
       res.json({result: result, error: err});
     });
   });
 
-  app.get("/pdf/reset/:id", function(req, res) {
+  // id = solutionId
+  app.get("/pdfs/reset/:id", function(req, res) {
     slave.resetPdf(req.params.id, function(error) {
       res.json({reset: error === undefined, error: error});
     });
   });
 
-  app.get("/pdf/resetAll", function(req, res) {
+  app.get("/pdfs/resetAll", function(req, res) {
     slave.resetAllPdf(function(error) {
       res.json({reset: error === undefined, error: error});
     })
-  })
+  });
 
-  app.get("/test/:id", function (req, res) {
+  // id = solutionId
+  app.get("/tests/:id", function (req, res) {
     slave.runTest(req.params.id, function(err, testResults) {
       var o = {testResults: testResults};
       if (err) {
@@ -54,9 +57,9 @@ if(process.argv.length == 2){
   });
 
   app.get("/solutions/store", function(req, res){
-    var started = slave.storeSolutions();
+    var started = slave.storeAllSolutions();
     if(started){
-      res.status(400).send("starting sharejs store operation").end();
+      res.send("starting sharejs store operation").end();
     } else {
       res.status(400).send("sharejs store operation still in progress").end();
     }
@@ -68,7 +71,8 @@ if(process.argv.length == 2){
     res.sendStatus(204);
   });
 
-  app.get("/solution/store/:id", function(req, res) {
+  // id = solutionId
+  app.get("/solutions/store/:id", function(req, res) {
     var cb = function(err, result) {
       if (err)
         res.json({error: err});
@@ -87,7 +91,7 @@ if(process.argv.length == 2){
    *  A job (identified by database id) can only run once per slave.
    *  But a slave can run multiple jobs of different id.
    */
-  app.post("/job/add", function(req, res) {
+  app.post("/jobs/add", function(req, res) {
       info = req.body;
 
       if (info.name === undefined || info.data === undefined) {
@@ -111,7 +115,8 @@ if(process.argv.length == 2){
       });
   });
 
-  app.get("/job/run/:id", function(req, res) {
+  // id = jobId
+  app.get("/jobs/run/:id", function(req, res) {
     info = req.body;
 
     scheduler.runJob(req.params.id, function(err, job) {
@@ -122,7 +127,8 @@ if(process.argv.length == 2){
     });
   });
 
-  app.get("/job/cancel/:id", function(req, res) {
+  // id = jobId
+  app.get("/jobs/cancel/:id", function(req, res) {
     // cancel a job only if its running
     scheduler.cancelJob(req.params.id);
   });

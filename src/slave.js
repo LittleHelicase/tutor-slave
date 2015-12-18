@@ -8,7 +8,8 @@ jailed = require('jailed');
 
 var cnt = 0;
 module.exports = function(db, config){
-  var inStoreLock = false;
+  var perpetualStoreOnceFlag = false;
+  var storeLock = false;
   var inProcessingLock = false;
 
   // merges markdown for a task
@@ -19,28 +20,53 @@ module.exports = function(db, config){
     return merged
   }
 
-  processMd = function(taskIdx, md, result, cb) {
+  reduceTestResult = function(testResult) {
+    delete testResult.test;
+    return testResult;
+  }
+
+  /**
+   *  taskIdx = ?
+   *  md = markdown including all tests and code.
+   *  results = [DEP]
+   *  cb = async callback (err, results)
+   **/
+  processMd = function(taskIdx, md, cb) {
     processors = [];
 
     var testProcessor  = require('@more-markdown/test-processor');
     var graphTestSuite = require('@tutor/graph-test-suite');
     var testSuite      = require('@tutor/test-suite');
     var testConfig     = require('./test_config.js');
+    var curTests = {};
+    var results;
 
     processors.push(testProcessor(["test", "tests"], {
       tests: [
         testSuite.itTests({
-          registerTest: function(name) {
-            result[taskIdx].push({name: name, passes: false});
+          registerTest: function(test) {
+            curTests[test.name] = {
+              name: test.name,
+              status: "running",
+              test: test.code,
+              passes: undefined
+            };
           },
-          testResult: function(err, idx) {
-            result[taskIdx] = {};
-            result[taskIdx][idx].passes = (err == null);
+          testResult: function(err, name) {
+            curTests[name].passes = (err == null);
+            curTests[name].status = "finished"
+            curTests[name].error = err;
           },
-          allResults: function(results) {
-            if (result[taskIdx] == undefined)
-              result[taskIdx] = {};
-            result[taskIdx].results = results;
+          allResults: function(err) {
+            results = _.map(curTests, function(t){
+              if (t.status == "running") {
+                t.status = err
+              }
+              if (!t.passes /* undefined or false */) {
+                t.passes = false
+              }
+              return t
+            });
           }
         }), testSuite.jsTests, graphTestSuite.collectGraphs, graphTestSuite.graphApi
       ],
@@ -66,7 +92,9 @@ module.exports = function(db, config){
     moreMarkdown.process(md, {
       processors: processors,
       html: false,
-    }, function(err) {cb()});
+    }, function(err) {
+      cb(err, results);
+    });
 
   }
 
@@ -106,19 +134,32 @@ module.exports = function(db, config){
         callback(err);
       });
     },
-    storeSolutions: function() {
-      if(inStoreLock) return false;
+    storeAllSolutions: function() {
+      db.Manage.storeAllSolutions().then(function() {
+        console.log("finished");
+      });
+
+      return true;
+    },
+    storeAllFinalSolutions: function(sid) {
+      db.Manage.storeAllFinalSolutions().then(function() {
+        console.log("finished");
+      });
+
+      return true;
+    },
+    storeSolutionsForever: function() {
+      if(perpetualStoreOnceFlag) return false;
       var interval = setInterval(function(){
-        inStoreLock = true;
+        perpetualStoreOnceFlag = true;
         db.Manage.updateOldestSolution().catch(function(err){
           clearInterval(interval);
-          inStoreLock = false;
+          perpetualStoreOnceFlag = false;
         });
       }, 1000);
       return true;
     },
     storeSolution: function(sid, cb) {
-      if(inStoreLock) return false;
       db.Manage.storeSolution(sid).then(function(res) {
         cb(null, res);
       });
@@ -185,23 +226,36 @@ module.exports = function(db, config){
       db.Manage.pluckSolution(solutionId, ["exercise", "tasks"]).then(function (solution) {
         db.Manage.getTestsFromExercise(solution.exercise).then(function (exerciseTasks) {
 
-          var result = [];
-
-          async.forEachOf(
+          var index = 0;
+          async.map(
             exerciseTasks,
-            function(value, key, cb) {
-              var merged = mergeMarkdown(exerciseTasks.tests, value.solutionTests, solution.tasks[key].solution);
-              processMd(key, merged, result, cb);
+            function(item, cb) {
+              var merged = mergeMarkdown(item.tests, item.solutionTests, solution.tasks[index].solution);
+              processMd(++index, merged, cb);
             },
-            function(err) {
+            function(err, results) {
+              // fix format for database for easy merge.
+              /* --- FORMAT ---
+              [
+                tests: [...], ...
+              ]
+              */
+              results = _.map(results, function(result) {
+                if (result === null || result === undefined)
+                  result = [];
+                return {
+                  "tests": result
+                }
+              });
 
-              // FIXME: Do something useful!
-              if (err)
-                callback(err, result);
-              else
-                callback(null, result);
+              db.Manage.storeTestResults(solutionId, results).then(function() {
+                if (err)
+                  callback(err, results);
+                else
+                  callback(null, results);
+              });
             }
-          )
+          );
         }).catch(function(err) {
           callback(err);
         });
