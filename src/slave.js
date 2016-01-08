@@ -100,8 +100,8 @@ module.exports = function(db, config){
 
   var processSpecificSolutionImpl = function(solution, onFinish) {
     pdfexport("./template/template.html", function(converter) {
-      var markdown = _.reduce(solution.tasks.solution, function(acc, current){ return acc + "\n" + current},"");
-      converter(markdown, function(err, pdf){
+      var markdown = _.reduce(solution.tasks, function(acc, current){ return acc + "\n" + current.solution},"");
+      converter(markdown, "", function(err, pdf){
         cnt++;
         require('stream-to-array')(pdf.stream).then(function (parts) {
           var buffers = [];
