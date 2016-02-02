@@ -100,7 +100,9 @@ module.exports = function(db, config){
 
   var processSpecificSolutionImpl = function(solution, onFinish) {
     var converter = pdfexport("./template/template.html");
+    //TODO add points for each task to markdown, add task description
     var markdown = _.reduce(solution.tasks, function(acc, current){ return acc + "\n" + current.solution},"");
+    //TODO to add corrections to the PDF, set the second parameter to `_.map(solution.result.pages, 'shapes')`
     converter(markdown, []).then(function(pdf) {
       cnt++;
       require('stream-to-array')(pdf.stream).then(function (parts) {
@@ -113,7 +115,10 @@ module.exports = function(db, config){
       });
 
       onFinish(true);
-    });
+    })
+    .catch(function(err) {
+      onFinish(false, err);
+    })
   };
 
   Slave = {
