@@ -26,7 +26,7 @@ module.exports = function(db, config){
   }
 
   /**
-   *  taskIdx = ?
+   *  taskIdx = index of the task in the solution array
    *  md = markdown including all tests and code.
    *  results = [DEP]
    *  cb = async callback (err, results)
@@ -99,21 +99,20 @@ module.exports = function(db, config){
   }
 
   var processSpecificSolutionImpl = function(solution, onFinish) {
-    pdfexport("./template/template.html", function(converter) {
-      var markdown = _.reduce(solution.tasks, function(acc, current){ return acc + "\n" + current.solution},"");
-      converter(markdown, "", function(err, pdf){
-        cnt++;
-        require('stream-to-array')(pdf.stream).then(function (parts) {
-          var buffers = [];
-          for (var i = 0, l = parts.length; i < l ; ++i) {
-            var part = parts[i]
-            buffers.push((part instanceof Buffer) ? part : new Buffer(part))
-          }
-          db.Manage.insertFinishedPdf(solution.id, Buffer.concat(buffers));
-        });
-
-        onFinish(true);
+    var converter = pdfexport("./template/template.html");
+    var markdown = _.reduce(solution.tasks, function(acc, current){ return acc + "\n" + current.solution},"");
+    converter(markdown, []).then(function(pdf) {
+      cnt++;
+      require('stream-to-array')(pdf.stream).then(function (parts) {
+        var buffers = [];
+        for (var i = 0, l = parts.length; i < l ; ++i) {
+          var part = parts[i]
+          buffers.push((part instanceof Buffer) ? part : new Buffer(part))
+        }
+        db.Manage.insertFinishedPdf(solution.id, Buffer.concat(buffers));
       });
+
+      onFinish(true);
     });
   };
 
