@@ -4,7 +4,7 @@
   "description": "A webservice for processing exercises automatically.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/mocha/bin/mocha"
   },
   "keywords": [
     "Tutor",
@@ -38,6 +38,10 @@
   },
   "repository": "gitlab:Welfenlab/tutor-slave.git",
   "devDependencies": {
-    "@tutor/memory-database": "^0.6.9"
+    "@tutor/memory-database": "^0.6.9",
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "pdf2json": "^0.7.1",
+    "stream-to": "^2.0.0"
   }
 }

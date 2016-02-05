@@ -11,10 +11,13 @@
 </head>
 <body>
   <div id="output"></div>
+  <div id="correction"></div>
+  <div id="highlighter"></div>
 
   <script src="file://{dir}/scripts/template.bundle.js"></script>
   <script>
     renderMarkdown("{{markdown-base64}}");
+    renderCorrection("{{correction-base64}}");
   </script>
 </body>
 </html>

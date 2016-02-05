@@ -1,5 +1,3 @@
-
-var pdfexport = require('@tutor/pdfexport');
 var fs = require('fs');
 var _ = require('lodash');
 var moreMarkdown = require('more-markdown');
@@ -98,12 +96,10 @@ module.exports = function(db, config){
 
   }
 
-  var processSpecificSolutionImpl = function(solution, onFinish) {
-    var converter = pdfexport("./template/template.html");
-    //TODO add points for each task to markdown, add task description
-    var markdown = _.reduce(solution.tasks, function(acc, current){ return acc + "\n" + current.solution},"");
-    //TODO to add corrections to the PDF, set the second parameter to `_.map(solution.result.pages, 'shapes')`
-    converter(markdown, []).then(function(pdf) {
+  var generatePdf = require('./pdf_processor');
+  var processSpecificSolutionImpl = function(exercise, solution, onFinish) {
+    generatePdf(exercise, solution)
+    .then(function(pdf) {
       cnt++;
       require('stream-to-array')(pdf.stream).then(function (parts) {
         var buffers = [];
@@ -119,7 +115,7 @@ module.exports = function(db, config){
     .catch(function(err) {
       onFinish(false, err);
     })
-  };
+  }
 
   Slave = {
     resetPdf: function(solutionId, callback) {
