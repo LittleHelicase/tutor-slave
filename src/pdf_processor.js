@@ -11,14 +11,15 @@ ${tasks}
 
 var taskToMarkdown = (task, solution, points) => {
   var md = `## ${task.number} ${task.title}
-${task.text}
-`;
+${task.text}` + '   \n';
 
   if (points) {
-    md += `__${points} of ${task.maxPoints} points__`;
+    md += `*${points} of ${task.maxPoints} points*`;
   } else {
-    md += `__${task.maxPoints} points__`;
+    md += `*${task.maxPoints} points*`;
   }
+
+  md += `\n\n${solution}`;
 
   return md;
 }
