@@ -13,7 +13,6 @@
     "@more-markdown/mathjax-processor": "^0.1.2",
     "@tutor/markdown2html": "^0.2.25",
     "canvas2svg": "^1.0.16",
-    "highlight.js": "^9.2.0",
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
     "more-markdown": "^0.1.3",
