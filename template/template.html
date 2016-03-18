@@ -2,8 +2,9 @@
 <head>
   <meta charset="utf8">
   <link rel="stylesheet" type="text/css" href="file://{dir}/styles/pdf.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/default.min.css"/>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+  <link rel="stylesheet" href="file://{dir}/node_modules/highlight.js/styles/default.css">
+  <script src="file://{dir}/node_modules/highlight.js/lib/highlight.js"></script>
+  <script src="file://{dir}/node_modules/highlight.js/lib/languages/javascript.js"></script>
   <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
   <script type="test/x-mathjax-config">
     MathJax.Hub.msieHTMLCollectionBug = true;
@@ -19,5 +20,6 @@
     renderMarkdown("{{markdown-base64}}");
     renderCorrection("{{correction-base64}}");
   </script>
+  {dir}
 </body>
 </html>

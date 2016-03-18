@@ -1,3 +1,4 @@
+/* global Buffer */
 var fs = require('fs');
 var _ = require('lodash');
 var moreMarkdown = require('more-markdown');
@@ -96,28 +97,49 @@ module.exports = function(db, config){
 
   }
 
+  var streamToArray = require('stream-to-array')
   var generatePdf = require('./pdf_processor');
-  var processSpecificSolutionImpl = function(exercise, solution, onFinish) {
-    generatePdf(exercise, solution)
+  var processSpecificSolutionImpl = function(solution, onFinish) {
+    var result
+    db.Manage.getById(solution.exercise).then(function(exercise) {
+      if (solution.results) {
+        result = {type: "solution with correction"}
+        console.log(solution.results)
+        return Promise.all([generatePdf(exercise, _.omit(solution, 'results')), generatePdf(exercise, solution)])
+      } else {
+        result = {type: "solution without correction"}
+        return Promise.all([generatePdf(exercise, solution)])
+      }
+    })
     .then(function(pdf) {
-      cnt++;
-      require('stream-to-array')(pdf.stream).then(function (parts) {
+      
+      var p1 = streamToArray(pdf[0].stream).then(function (parts) {
         var buffers = [];
         for (var i = 0, l = parts.length; i < l ; ++i) {
           var part = parts[i]
           buffers.push((part instanceof Buffer) ? part : new Buffer(part))
         }
-        db.Manage.insertFinishedPdf(solution.id, Buffer.concat(buffers));
+        return db.Manage.insertFinishedPdf(solution.id, Buffer.concat(buffers));
+      });
+      
+      var p2 = streamToArray(pdf[1].stream).then(function (parts) {
+        var buffers = [];
+        for (var i = 0, l = parts.length; i < l ; ++i) {
+          var part = parts[i]
+          buffers.push((part instanceof Buffer) ? part : new Buffer(part))
+        }
+        return db.Manage.insertCorrectedPdf(solution.id, Buffer.concat(buffers));
       });
 
-      onFinish(true);
+      Promise.all([p1, p2]).then(_.partial(onFinish, result, null))
     })
     .catch(function(err) {
+      console.error(err)
       onFinish(false, err);
     })
   }
 
-  Slave = {
+  var Slave = {
     resetPdf: function(solutionId, callback) {
       db.Manage.resetPdfForSolution(solutionId).then(function() {
         callback();
@@ -178,8 +200,9 @@ module.exports = function(db, config){
               db.Manage.lockSpecificSolutionForPdfProcessor(solutionId).then(function(rdbChange) {
                 if (rdbChange.replaced !== 1)
                   onFinish(false, "could not update already processed solution after reset.");
-                else
+                else {
                   return processSpecificSolutionImpl(rdbChange.changes[0].new_val, onFinish);
+                }
               }).catch(function(err) {
                 onFinish(false, "could not reset and update already processed solution.");
               })

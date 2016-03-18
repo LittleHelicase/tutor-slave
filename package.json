@@ -21,8 +21,8 @@
   "dependencies": {
     "@tutor/graph-test-suite": "^0.2.1",
     "@tutor/jailed-sandbox": "^0.3.0",
-    "@tutor/pdfexport": "^0.5.0",
-    "@tutor/rethinkdb-database": "^0.5.27",
+    "@tutor/pdfexport": "^0.5.1",
+    "@tutor/rethinkdb-database": "^0.5.34",
     "@tutor/test-suite": "^0.2.2",
     "async": "^1.5.0",
     "body-parser": "^1.14.1",

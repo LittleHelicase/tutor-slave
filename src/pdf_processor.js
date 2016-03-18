@@ -26,13 +26,12 @@ ${task.text}` + '   \n';
 
 module.exports = function(exercise, solution) {
   var converter = pdfexport("./template/template.html");
-
   var points = solution.results ? solution.results.points : null;
   var tasksMarkdown = _.zip(exercise.tasks, solution.tasks.map(t => t.solution), points)
                       .map(args => taskToMarkdown(args[0], args[1], args[2]));
   var markdown = exerciseToMarkdown(exercise, _.reduce(tasksMarkdown, (acc, current) => `${acc}\n\n${current}`, ''));
-
   if (solution.results) {
+    console.log('results', _.map(solution.results.pages, 'shapes'))
     return converter(markdown, _.map(solution.results.pages, 'shapes'));
   } else {
     return converter(markdown, []);

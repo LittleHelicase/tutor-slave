@@ -19,7 +19,7 @@ window.renderMarkdown = (markdownBase64) ->
     markdownToHtml = require('@tutor/markdown2html')(defaultConfig)
     markdownToHtml('output').render(atob(markdownBase64))
   catch e
-    document.body.innerText = e.stack
+    document.body.innerText = JSON.stringify(e)
 
   MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
   MathJax.Hub.Queue -> window.PHANTOM_HTML_TO_PDF_READY = true
