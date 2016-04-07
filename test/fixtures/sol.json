@@ -1,0 +1,825 @@
+{
+  "corrected": true,
+  "correctedPDFGenerationDate": "2016-04-07T13:55:58.133Z",
+  "exercise": "a6eb531e-a530-43c5-aeba-61b121ddbac4",
+  "finalSolutionStored": true,
+  "group": "280196fe-4d67-4ec8-bb5f-e3c9175ca5bd",
+  "id": "f8914039-f375-411d-9387-1538a3073708",
+  "inProcess": false,
+  "lastStore": "2016-04-07T13:55:48.727Z",
+  "lock": "max",
+  "lockTimeStamp": "2016-03-11T15:42:20.735Z",
+  "pdfGenerationDate": "2016-04-07T13:55:58.122Z",
+  "processed": true,
+  "processingLock": true,
+  "results": {
+    "pages": [
+      {
+        "page": 1,
+        "shapes": [
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 98.77,
+                "y": 217.77
+              },
+              {
+                "x": 860.37,
+                "y": 217.77
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 944.86,
+                "y": 493.84999999999997
+              },
+              {
+                "x": 944.86,
+                "y": 574.77
+              },
+              {
+                "x": 957.9499999999999,
+                "y": 683.06
+              },
+              {
+                "x": 957.9499999999999,
+                "y": 709.24
+              },
+              {
+                "x": 965.09,
+                "y": 762.79
+              },
+              {
+                "x": 965.09,
+                "y": 779.45
+              },
+              {
+                "x": 967.47,
+                "y": 788.97
+              },
+              {
+                "x": 967.47,
+                "y": 797.3
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 817.53,
+                "y": 843.71
+              },
+              {
+                "x": 817.53,
+                "y": 842.52
+              },
+              {
+                "x": 818.72,
+                "y": 840.14
+              },
+              {
+                "x": 818.72,
+                "y": 834.1899999999999
+              },
+              {
+                "x": 819.91,
+                "y": 830.62
+              },
+              {
+                "x": 819.91,
+                "y": 819.91
+              },
+              {
+                "x": 822.29,
+                "y": 813.96
+              },
+              {
+                "x": 822.29,
+                "y": 784.21
+              },
+              {
+                "x": 831.81,
+                "y": 730.66
+              },
+              {
+                "x": 837.76,
+                "y": 721.14
+              },
+              {
+                "x": 842.52,
+                "y": 709.24
+              },
+              {
+                "x": 844.9,
+                "y": 696.15
+              },
+              {
+                "x": 854.42,
+                "y": 665.21
+              },
+              {
+                "x": 856.8,
+                "y": 659.26
+              },
+              {
+                "x": 856.8,
+                "y": 656.88
+              },
+              {
+                "x": 857.99,
+                "y": 654.5
+              },
+              {
+                "x": 857.99,
+                "y": 652.12
+              },
+              {
+                "x": 859.18,
+                "y": 650.93
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 503.37,
+                "y": 1638.6299999999999
+              },
+              {
+                "x": 508.13,
+                "y": 1633.87
+              },
+              {
+                "x": 511.7,
+                "y": 1631.49
+              },
+              {
+                "x": 514.08,
+                "y": 1629.11
+              },
+              {
+                "x": 521.22,
+                "y": 1625.54
+              },
+              {
+                "x": 530.74,
+                "y": 1621.97
+              },
+              {
+                "x": 535.5,
+                "y": 1620.78
+              },
+              {
+                "x": 541.45,
+                "y": 1618.3999999999999
+              },
+              {
+                "x": 546.21,
+                "y": 1616.02
+              },
+              {
+                "x": 549.78,
+                "y": 1614.83
+              },
+              {
+                "x": 552.16,
+                "y": 1614.83
+              },
+              {
+                "x": 555.73,
+                "y": 1613.6399999999999
+              },
+              {
+                "x": 556.92,
+                "y": 1612.45
+              },
+              {
+                "x": 558.11,
+                "y": 1612.45
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          }
+        ]
+      },
+      {
+        "page": 2,
+        "shapes": [
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 902.02,
+                "y": 1573.03125
+              },
+              {
+                "x": 902.02,
+                "y": 1573.03125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 531.93,
+                "y": 329.48125
+              },
+              {
+                "x": 530.74,
+                "y": 330.67125
+              },
+              {
+                "x": 530.74,
+                "y": 339.00124999999997
+              },
+              {
+                "x": 536.6899999999999,
+                "y": 344.95125
+              },
+              {
+                "x": 539.0699999999999,
+                "y": 344.95125
+              },
+              {
+                "x": 541.45,
+                "y": 346.14125
+              },
+              {
+                "x": 550.97,
+                "y": 346.14125
+              },
+              {
+                "x": 562.87,
+                "y": 337.81125
+              },
+              {
+                "x": 570.01,
+                "y": 336.62125
+              },
+              {
+                "x": 579.53,
+                "y": 329.48125
+              },
+              {
+                "x": 612.85,
+                "y": 297.35125
+              },
+              {
+                "x": 614.04,
+                "y": 292.59125
+              },
+              {
+                "x": 615.23,
+                "y": 291.40125
+              },
+              {
+                "x": 615.23,
+                "y": 284.26125
+              },
+              {
+                "x": 612.85,
+                "y": 281.88125
+              },
+              {
+                "x": 589.05,
+                "y": 281.88125
+              },
+              {
+                "x": 584.29,
+                "y": 283.07125
+              },
+              {
+                "x": 579.53,
+                "y": 285.45125
+              },
+              {
+                "x": 571.2,
+                "y": 287.83125
+              },
+              {
+                "x": 567.63,
+                "y": 290.21125
+              },
+              {
+                "x": 565.25,
+                "y": 291.40125
+              },
+              {
+                "x": 561.68,
+                "y": 294.97125
+              },
+              {
+                "x": 560.49,
+                "y": 297.35125
+              },
+              {
+                "x": 560.49,
+                "y": 314.01125
+              },
+              {
+                "x": 562.87,
+                "y": 317.58125
+              },
+              {
+                "x": 565.25,
+                "y": 319.96125
+              },
+              {
+                "x": 570.01,
+                "y": 322.34125
+              },
+              {
+                "x": 571.2,
+                "y": 323.53125
+              },
+              {
+                "x": 574.77,
+                "y": 325.91125
+              },
+              {
+                "x": 578.34,
+                "y": 327.10125
+              },
+              {
+                "x": 583.1,
+                "y": 329.48125
+              },
+              {
+                "x": 590.24,
+                "y": 331.86125
+              },
+              {
+                "x": 596.1899999999999,
+                "y": 331.86125
+              },
+              {
+                "x": 599.76,
+                "y": 333.05125
+              },
+              {
+                "x": 619.99,
+                "y": 333.05125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 723.52,
+                "y": 956.61125
+              },
+              {
+                "x": 725.9,
+                "y": 958.99125
+              },
+              {
+                "x": 725.9,
+                "y": 978.03125
+              },
+              {
+                "x": 724.71,
+                "y": 981.6012499999999
+              },
+              {
+                "x": 724.71,
+                "y": 993.50125
+              },
+              {
+                "x": 725.9,
+                "y": 997.07125
+              },
+              {
+                "x": 734.23,
+                "y": 1005.40125
+              },
+              {
+                "x": 737.8,
+                "y": 1006.59125
+              },
+              {
+                "x": 768.74,
+                "y": 1006.59125
+              },
+              {
+                "x": 775.88,
+                "y": 1004.21125
+              },
+              {
+                "x": 794.92,
+                "y": 999.45125
+              },
+              {
+                "x": 800.87,
+                "y": 997.07125
+              },
+              {
+                "x": 806.8199999999999,
+                "y": 995.88125
+              },
+              {
+                "x": 810.39,
+                "y": 993.50125
+              },
+              {
+                "x": 812.77,
+                "y": 991.12125
+              },
+              {
+                "x": 812.77,
+                "y": 949.4712499999999
+              },
+              {
+                "x": 813.96,
+                "y": 943.52125
+              },
+              {
+                "x": 816.34,
+                "y": 938.76125
+              },
+              {
+                "x": 817.53,
+                "y": 934.00125
+              },
+              {
+                "x": 821.1,
+                "y": 928.05125
+              },
+              {
+                "x": 834.1899999999999,
+                "y": 892.3512499999999
+              },
+              {
+                "x": 834.1899999999999,
+                "y": 885.21125
+              },
+              {
+                "x": 835.38,
+                "y": 881.64125
+              },
+              {
+                "x": 835.38,
+                "y": 876.88125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 234.43,
+                "y": 943.52125
+              },
+              {
+                "x": 310.59,
+                "y": 943.52125
+              },
+              {
+                "x": 1010.31,
+                "y": 1042.29125
+              },
+              {
+                "x": 1022.21,
+                "y": 1045.86125
+              },
+              {
+                "x": 1026.97,
+                "y": 1045.86125
+              },
+              {
+                "x": 1028.16,
+                "y": 1047.05125
+              },
+              {
+                "x": 1024.59,
+                "y": 1050.62125
+              },
+              {
+                "x": 1023.4,
+                "y": 1050.62125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 1057.91,
+                "y": 961.37125
+              },
+              {
+                "x": 1030.54,
+                "y": 961.37125
+              },
+              {
+                "x": 516.46,
+                "y": 1105.36125
+              },
+              {
+                "x": 328.44,
+                "y": 1129.1612499999999
+              },
+              {
+                "x": 308.21,
+                "y": 1129.1612499999999
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 324.87,
+                "y": 1256.49125
+              },
+              {
+                "x": 379.61,
+                "y": 1304.09125
+              },
+              {
+                "x": 408.17,
+                "y": 1321.94125
+              },
+              {
+                "x": 433.15999999999997,
+                "y": 1344.55125
+              },
+              {
+                "x": 522.41,
+                "y": 1412.38125
+              },
+              {
+                "x": 592.62,
+                "y": 1448.08125
+              },
+              {
+                "x": 602.14,
+                "y": 1455.22125
+              },
+              {
+                "x": 608.09,
+                "y": 1455.22125
+              },
+              {
+                "x": 609.28,
+                "y": 1456.4112499999999
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 649.74,
+                "y": 1321.94125
+              },
+              {
+                "x": 650.93,
+                "y": 1320.75125
+              },
+              {
+                "x": 650.93,
+                "y": 1326.70125
+              },
+              {
+                "x": 635.46,
+                "y": 1355.26125
+              },
+              {
+                "x": 627.13,
+                "y": 1374.30125
+              },
+              {
+                "x": 511.7,
+                "y": 1526.62125
+              },
+              {
+                "x": 491.46999999999997,
+                "y": 1546.85125
+              },
+              {
+                "x": 476,
+                "y": 1565.89125
+              },
+              {
+                "x": 467.67,
+                "y": 1574.22125
+              },
+              {
+                "x": 466.48,
+                "y": 1574.22125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 120.19,
+                "y": 1308.85125
+              },
+              {
+                "x": 124.95,
+                "y": 1308.85125
+              },
+              {
+                "x": 129.71,
+                "y": 1311.23125
+              },
+              {
+                "x": 148.75,
+                "y": 1355.26125
+              },
+              {
+                "x": 166.6,
+                "y": 1408.81125
+              },
+              {
+                "x": 166.6,
+                "y": 1425.47125
+              },
+              {
+                "x": 170.17,
+                "y": 1444.51125
+              },
+              {
+                "x": 177.31,
+                "y": 1469.50125
+              },
+              {
+                "x": 177.31,
+                "y": 1475.45125
+              },
+              {
+                "x": 178.5,
+                "y": 1475.45125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 345.1,
+                "y": 1273.15125
+              },
+              {
+                "x": 347.48,
+                "y": 1273.15125
+              },
+              {
+                "x": 351.05,
+                "y": 1275.53125
+              },
+              {
+                "x": 364.14,
+                "y": 1295.76125
+              },
+              {
+                "x": 370.09,
+                "y": 1307.6612499999999
+              },
+              {
+                "x": 374.85,
+                "y": 1325.51125
+              },
+              {
+                "x": 406.98,
+                "y": 1421.90125
+              },
+              {
+                "x": 414.12,
+                "y": 1438.56125
+              },
+              {
+                "x": 423.64,
+                "y": 1467.12125
+              },
+              {
+                "x": 423.64,
+                "y": 1473.07125
+              },
+              {
+                "x": 424.83,
+                "y": 1474.26125
+              },
+              {
+                "x": 424.83,
+                "y": 1475.45125
+              },
+              {
+                "x": 424.83,
+                "y": 1473.07125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          },
+          {
+            "color": "#f00",
+            "events": [
+              {
+                "x": 462.90999999999997,
+                "y": 1273.15125
+              },
+              {
+                "x": 466.48,
+                "y": 1273.15125
+              },
+              {
+                "x": 470.05,
+                "y": 1276.72125
+              },
+              {
+                "x": 474.81,
+                "y": 1285.05125
+              },
+              {
+                "x": 480.76,
+                "y": 1292.19125
+              },
+              {
+                "x": 590.24,
+                "y": 1479.02125
+              },
+              {
+                "x": 599.76,
+                "y": 1490.9212499999999
+              },
+              {
+                "x": 605.71,
+                "y": 1500.44125
+              },
+              {
+                "x": 609.28,
+                "y": 1504.01125
+              }
+            ],
+            "size": 5,
+            "tool": "marker"
+          }
+        ]
+      },
+      {
+        "page": 3,
+        "shapes": []
+      }
+    ],
+    "points": [
+      2,
+      4
+    ]
+  },
+  "tasks": [
+    {
+      "solution": "abb\n\n| $k$ | $h_1(k)$ | $h_2(k)$ | 0 | 1 | 2 | 3 | 4 |\n|:---:|:--------:|:--------:|:-:|:-:|:-:|:-:|:-:|\n| $13$|          |          |   |   |   |   |   |"
+    },
+    {
+      "solution": "```js\n// Funktion für das lineare Sondieren.\n// Eingaben:\n// - x: Wert der in der Tabelle abgespeichert werden soll\n// - table: Die Hashtabelle die verwendet werden soll (Referenz)\n// Ausgabe:\n// - Das x wird in die Tabelle eingefügt. Zurückgegeben wird aber die Anzahl\n//   der Versuche die zum Einfügen benötigt wurden. Also beim sofortigem\n//   Einfügen 1, bei einer Kollision 2, etc.\nfunction linearProbing(x, table){\n  return 1\n}\n\n// Funktion für das double Hashing.\n// Eingaben:\n// - x: Wert der in der Tabelle abgespeichert werden soll\n// - table: Die Hashtabelle die verwendet werden soll\n// - h2: Funktion die den zweiten Hashwert berechnet\nfunction doubleHashing(x, table, h2){\n  // implementieren\n}\n\n// Funktion für das quadratische Sondieren.\n// Eingaben:\n// - x: Wert der in der Tabelle abgespeichert werden soll\n// - table: Die Hashtabelle die verwendet werden soll\nfunction quadraticProbing(x, table){\n  // implementieren\n}\n\n\n// Funktion die die mittlere Kollisionszahl für eine Tabelle der\n// Größe n empirisch bestimmt.\n// Eingaben:\n// - alpha: Füllgrad (englisch load factor)\n// - n: Größe/Länge der Tabelle\nfunction probeLoadFactor(alpha, n){\n  // implementieren\n}\n\n// Funktion die eine Kollisionsstrategien mit den gegebenen alpha Werten\n// testet. D.h. die mittlere Kollisionszahlen für die einzelnen Alpha\n// Werte berechnet.\n// Eingaben:\n// - fn: Die Funktion die getestet werden soll (z.B. linearProbing)\n// - alphas: Ein Array von alpha Werten die getestet werden sollen\n// - n: Größe/Länge der Tabelle die getestet werden soll.\nfunction probeMethod(fn, alphas, n){\n  // implementieren\n}\n\n// Native Möglichkeit ein Array zu initialisieren. \nvar alphas = (Array.apply(null, Array(100)))\n  .map(function(n,idx){ return idx/(100 - 1); })\n```\n\n```\nplot(probeMethod(linearProbing, alphas, 541))\nplot(probeMethod(doubleHashing, alphas, 541))\nplot(probeMethod(quadraticProbing, alphas, 541))\n```"
+    }
+  ],
+  "temp": [
+    {
+      "solution": " - Lineares Sondieren\n\n| $k$ | $h_1(k)$ | 0 | 1 | 2 | 3 | 4 |\n|:---:|:--------:|:-:|:-:|:-:|:-:|:-:|\n|     |          |   | 17| 3 |   | 12|\n| 11  |    1     |   | → | → | 11| 12|\n\n - Double Hashing\n\n| $k$ | $h_1(k)$ | $h_2(k)$ | 0 | 1 | 2 | 3 | 4 |\n|:---:|:--------:|:--------:|:-:|:-:|:-:|:-:|:-:|\n|     |          |          |   | 17| 3 |   | 12|\n| 11  |     1    |    3     |   | → |(→)|(→)| → |\n| 11  |     1    |    3     |(→)|(→)| → |(→)|(→)|\n| 11  |     1    |    3     | 11|   |   |   |   |\n\n - Quadratisches Sondieren\n\n| $k$ | $h_1(k)$ | 0 | 1 | 2 | 3 | 4 |\n|:---:|:--------:|:-:|:-:|:-:|:-:|:-:|\n|     |          |   | 17| 3 |   | 12|\n| 11  |     1    |   | → | → |(→)|(→)|\n| 11  |     1    | 11|   |   |   |   |",
+      "solutionTests": "",
+      "tests": "",
+      "title": "Quadratisches Sondieren"
+    },
+    {
+      "solution": "",
+      "solutionTests": "",
+      "tests": "```tests\nit(\"[Lineares Sondieren] Einfügen in eine leere Tabelle benötigt einen Versuchen\", function(){\n  var res = linearProbing(0, new Array(3));\n  if(res != 1){\n    throw \"Einfügen in eine leere Tabelle gibt nicht 1 zurück.\";\n  }\n})\nit(\"[Double Hashing] Einfügen in eine leere Tabelle benötigt einen Versuchen\", function(){\n  var res = doubleHashing(0, new Array(3));\n  if(res != 1){\n    throw \"Einfügen in eine leere Tabelle gibt nicht 1 zurück.\";\n  }\n})\nit(\"[Quadratisches Sondieren] Einfügen in eine leere Tabelle benötigt einen Versuchen\", function(){\n  var res = quadraticProbing(0, new Array(3));\n  if(res != 1){\n    throw \"Einfügen in eine leere Tabelle gibt nicht 1 zurück.\";\n  }\n})\n```",
+      "title": "Kollisionsvergleich"
+    }
+  ]
+}

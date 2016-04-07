@@ -41,6 +41,25 @@ describe("pdf processor", function() {
     });
   });
 
+  it("should generate a pdf for a real example", function() {
+    this.timeout(30000);
+
+    let exercise = require('./fixtures/ex.json');
+    let solution = require('./fixtures/sol.json');
+
+    return generatePdf(exercise, solution)
+    .then(function(pdf) {
+      isReadableStream(pdf.stream).should.be.true;
+      var ws = require('fs').createWriteStream('./example2.pdf');
+      pdf.stream.pipe(ws);
+      return pdf;
+    })
+    .then(require('./readPdf'))
+    .then(function(pdf) {
+      pdf.PDFJS.pages.length.should.equal(3);
+    });
+  });
+
   it("should generate a pdf with corrections", function() {
     this.timeout(30000);
 

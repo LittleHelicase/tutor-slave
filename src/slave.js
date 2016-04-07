@@ -104,7 +104,8 @@ module.exports = function(db, config){
     db.Manage.getById(solution.exercise).then(function(exercise) {
       if (solution.results) {
         result = {type: "solution with correction"}
-        console.log(solution.results)
+        require('fs').writeFileSync('ex.json', JSON.stringify(exercise, null, 2))
+        require('fs').writeFileSync('sol.json', JSON.stringify(_.omit(_.omit(solution, 'pdf'), 'correctedPDF'), null, 2))
         return Promise.all([generatePdf(exercise, _.omit(solution, 'results')), generatePdf(exercise, solution)])
       } else {
         result = {type: "solution without correction"}
